@@ -23,6 +23,13 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
+    if x < 8:
+        return 0
+    else:
+        if x % 10 == 8:
+            return num_eights(x // 10) + 1
+        else:
+            return num_eights(x // 10)
 
 
 def pingpong(n):
@@ -58,6 +65,13 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def walker(direction, index, count):
+        if n == index:
+            return count
+        elif index % 8 == 0 or num_eights(index) > 0:
+            return walker(-1*direction, index+1, count-direction)
+        return walker(direction, index+1, count+direction)
+    return walker(1, 1, 1)
 
 
 def missing_digits(n):
@@ -88,6 +102,15 @@ def missing_digits(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    else:
+        all_but_last, last = n // 10, n % 10
+        second = all_but_last % 10
+        if second == last or second == last - 1:
+            return missing_digits(all_but_last)
+        else:
+            return missing_digits(all_but_last) + (last - second - 1) 
 
 
 def next_largest_coin(coin):
@@ -124,7 +147,18 @@ def count_coins(total):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def constrained_count(change, smallest_coin):
+        if change == 0:
+            return 1
+        elif change < 0:
+            return 0
+        elif smallest_coin == None:
+            return 0
+        else:
+            without_coin = constrained_count(change, next_largest_coin(smallest_coin))
+            with_coin = constrained_count(change - smallest_coin, smallest_coin)
+            return without_coin + with_coin
+    return constrained_count(total, 1)
 
 from operator import sub, mul
 
@@ -138,5 +172,16 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f: lambda k: f(f, k))(lambda f, k: k if k == 1 else mul(k, f(f, sub(k, 1))))
 
+# def make_anonymous_factorial():
+#   def func1(f):
+#     def func2(k):
+#       return f(f, k))
+#     return func2
+#   def func3(f, k):
+#     if k == 1:
+#       return k
+#     else:
+#       return mul(k, f(f, sub(k, 1)))
+#   return func1(func3)
