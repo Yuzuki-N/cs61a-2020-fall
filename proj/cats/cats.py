@@ -17,6 +17,15 @@ def choose(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    lst = []
+    for elem in paragraphs:
+        if select(elem) == True:
+            lst.append(elem)
+    if k >= len(lst):
+        return ""
+    else:
+        return lst[k]
+
     # END PROBLEM 1
 
 
@@ -33,6 +42,13 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def select(s):
+        lst = split(s)
+        for elem in lst:
+            if remove_punctuation(lower(elem)) in topic:
+                return True
+        return False
+    return select
     # END PROBLEM 2
 
 
@@ -57,6 +73,17 @@ def accuracy(typed, reference):
     reference_words = split(reference)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if typed == reference:
+        return 100.0
+    if typed == "":
+        return 0.0
+    my_input = split(typed)
+    answer = split(reference)
+    count = 0
+    for i in range(min(len(my_input),len(answer))):
+        if my_input[i] == answer[i]:
+            count += 1
+    return count / len(my_input) * 100
     # END PROBLEM 3
 
 
@@ -65,6 +92,7 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    return len(typed) / 5 / (elapsed / 60)
     # END PROBLEM 4
 
 
@@ -75,6 +103,18 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if user_word in valid_words:
+        return user_word
+    else:
+        lst = []
+        for elem in valid_words:
+            lst.append(diff_function(user_word, elem, limit))
+        miniest = min(lst)
+        index = lst.index(min(lst))
+        if miniest > limit:
+            return user_word
+        else:
+            return valid_words[index]
     # END PROBLEM 5
 
 
@@ -84,7 +124,23 @@ def shifty_shifts(start, goal, limit):
     their lengths.
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
+    def helper(rest, final, length):
+        if length > limit:
+            return True
+        if len(rest) > len(final):
+            return helper(rest[:len(final)], final, length+len(rest)-len(final)) + len(rest) - len(final)
+        if rest == "":
+            return len(final)
+        if rest == final:
+            return 0
+        if rest[0] == final[0]:
+            return helper(rest[1:], final[1:], length)
+        if rest[0] != final[0]:
+            return helper(rest[1:], final[1:], length+1) + 1
+        if length == limit:
+            return False
+    return helper(start, goal, 0)
     # END PROBLEM 6
 
 
