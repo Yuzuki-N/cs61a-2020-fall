@@ -146,25 +146,31 @@ def shifty_shifts(start, goal, limit):
 
 def pawssible_patches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
 
-    if ______________: # Fill in the condition
+    if limit < 0: # Fill in the condition
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return 0
         # END
 
-    elif ___________: # Feel free to remove or add additional cases
+    elif len(start) == 0 or len(goal) == 0:  # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return len(start) or len(goal)  # Fill in these lines
         # END
 
     else:
-        add_diff = ... # Fill in these lines
-        remove_diff = ...
-        substitute_diff = ...
+        if start[0] == goal[0]:
+            return s(start[1:], goal[1:], limit)
+
+        add_diff = pawssible_patchess(start, goal[1:], limit-1)  # Fill in these lines
+        remove_diff = pawssible_patches(start[1:], goal, limit-1)
+        substitute_diff = pawssible_patches(start[1:], goal[1:], limit-1)
         # BEGIN
         "*** YOUR CODE HERE ***"
-        # END
+        return min(add_diff,remove_diff,substitute_diff) + 1
+        # ENDD
 
 
 def final_diff(start, goal, limit):
@@ -216,7 +222,16 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
-    
+    times = []
+    # for lst in times_per_player:
+    #     temp = []
+    #     for i in range(len(lst) - 1):
+    #         temp.append(lst[i+1] - lst[i])
+    #     times.append(temp)
+    for player in times_per_player:
+        times.append([player[i] - player[i-1] for i in range(1, len(player))])
+
+    return game(words, times) 
     # END PROBLEM 9
 
 
@@ -232,6 +247,16 @@ def fastest_words(game):
     word_indices = range(len(all_words(game)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    fast = [[] for _ in player_indices]
+    for word in word_indices:
+        i = 0
+        mini_num = float('inf')
+        for player in player_indices:
+            if time(game, player, word) < mini_num:
+                i = player
+                mini_num = time(game, player, word)
+        fast[i].append(word_at(game, word))
+    return fast
     # END PROBLEM 10
 
 
