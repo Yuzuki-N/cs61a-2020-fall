@@ -107,9 +107,16 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
-    if left(m) * total_weight(end(left(m))) == right(m) * total_weight(end(right(m))) and balanced(end(left(m))) and balanced(end(right)):
+    if is_planet(m):
+        return True
+    left_end =  total_weight(end(left(m)))
+    right_end = total_weight(end(right(m)))
+    left_weight = length(left(m)) * left_end
+    right_weight = length(right(m)) * right_end
+    if balanced(end(left(m))) and balanced(end(right(m))) and left_weight == right_weight:
         return True
     return False
+
     
 
 def totals_tree(m):
@@ -142,6 +149,7 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    
 
 
 def replace_leaf(t, find_value, replace_value):
