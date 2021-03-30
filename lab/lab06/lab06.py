@@ -48,6 +48,13 @@ def make_fib():
     True
     """
     "*** YOUR CODE HERE ***"
+    cur, nxt = 0, 1
+    def fib():
+        nonlocal cur, nxt
+        result = cur
+        cur, nxt = nxt, cur + nxt
+        return result
+    return fib
 
 
 def insert_items(lst, entry, elem):
@@ -67,4 +74,12 @@ def insert_items(lst, entry, elem):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    idx = 0
+    while idx < len(lst):
+        if lst[idx] == entry:
+            lst.insert(idx+1, elem)
+            if entry == elem:
+                idx += 1
+        idx += 1
+    return lst
+    
