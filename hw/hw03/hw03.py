@@ -182,6 +182,10 @@ def replace_leaf(t, find_value, replace_value):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t) and label(t) == find_value:
+        # if label(t) == find_value:
+            return tree(replace_value)
+    # else:
 
 
 def preorder(t):
@@ -195,6 +199,7 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
+    
 
 
 def has_path(t, word):
@@ -227,7 +232,7 @@ def has_path(t, word):
     """
     assert len(word) > 0, 'no path for empty word.'
     "*** YOUR CODE HERE ***"
-
+    
 
 def interval(a, b):
     """Construct an interval from a to b."""
@@ -236,10 +241,13 @@ def interval(a, b):
 def lower_bound(x):
     """Return the lower bound of interval x."""
     "*** YOUR CODE HERE ***"
+    return x[0]
 
 def upper_bound(x):
     """Return the upper bound of interval x."""
     "*** YOUR CODE HERE ***"
+    return x[1]
+
 def str_interval(x):
     """Return a string representation of interval x.
     """
