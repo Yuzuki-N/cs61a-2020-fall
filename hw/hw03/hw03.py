@@ -149,6 +149,11 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return tree(size(m))
+    else:
+        branches = [totals_tree(end(f(m)) for f in [left, right])]
+        return tree(sum([label(b) for b in branches]), branches)
     
 
 
@@ -185,7 +190,9 @@ def replace_leaf(t, find_value, replace_value):
     if is_leaf(t) and label(t) == find_value:
         # if label(t) == find_value:
             return tree(replace_value)
-    # else:
+    else:
+        bs = [replace_leaf(b, find_value, replace_value) for b in branches(t)]
+        return tree(label(t), bs)
 
 
 def preorder(t):
@@ -199,8 +206,13 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return [label(t)]
     
-
+    lst = []
+    for b in branches(t):
+        lst += preorder(b)
+    return [label(t)] + lst
 
 def has_path(t, word):
     """Return whether there is a path in a tree where the entries along the path
@@ -232,6 +244,17 @@ def has_path(t, word):
     """
     assert len(word) > 0, 'no path for empty word.'
     "*** YOUR CODE HERE ***"
+    if label(t) != word[0]:
+        return False
+    elif len(word) == 1:
+        return True
+    for b in branches(t):
+        if has_path(b, word[1:]):
+            return True
+    return False
+    
+
+
     
 
 def interval(a, b):
