@@ -17,6 +17,11 @@ def make_adder_inc(a):
     11
     """
     "*** YOUR CODE HERE ***"
+    def helper(b):
+        nonlocal a
+        a = a + 1
+        return a + b - 1
+    return helper
 
 
 def make_fib():
