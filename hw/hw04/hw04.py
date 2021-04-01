@@ -101,7 +101,21 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    count = 1
+    cur = next(t)
+    nxt = next(t)
 
+    while True:
+        if cur == nxt:
+            count += 1
+            if count == k:
+                return cur
+            cur, nxt = nxt, next(t)
+        else:
+            count = 1
+            cur, nxt = nxt, next(t)
+
+    
 
 def permutations(seq):
     """Generates all permutations of the given sequence. Each permutation is a
@@ -126,6 +140,14 @@ def permutations(seq):
     [['a', 'b'], ['b', 'a']]
     """
     "*** YOUR CODE HERE ***"
+    if len(seq) == 1:
+            yield seq
+    else:
+        for element in permutations([x for x in seq if x != seq[0]]):
+            for k in range(len(element) + 1):
+                yield element[:k] + [seq[0]] + element[k:]
+
+
 
 
 def make_joint(withdraw, old_pass, new_pass):
@@ -167,6 +189,8 @@ def make_joint(withdraw, old_pass, new_pass):
     "Frozen account. Attempts: ['my', 'secret', 'password']"
     """
     "*** YOUR CODE HERE ***"
+    
+
 
 
 def remainders_generator(m):
