@@ -167,6 +167,8 @@ class ThrowerAnt(Ant):
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
     armor = 1
+    min_range = 0
+    max_range = float('inf')
 
 
     def nearest_bee(self, beehive):
@@ -176,13 +178,14 @@ class ThrowerAnt(Ant):
         This method returns None if there is no such Bee (or none in range).
         """
         # BEGIN Problem 3 and 4
-        cur = self.place
-        while cur != beehive and len(cur.bees) == 0:
-            cur = cur.entrance
-        if cur == beehive:
-            return None
-        else:
-            return rANTdom_else_none(cur.bees) # REPLACE THIS LINE
+        location = self.place
+        distance = 0
+        while location != beehive:
+            if location.bees and self.min_range <= distance <= self.max_range:
+                return rANTdom_else_none(location.bees)  # REPLACE THIS LINE
+            distance += 1
+            location = location.entrance
+        return None
         # END Problem 3 and 4
 
     def throw_at(self, target):
@@ -210,8 +213,9 @@ class ShortThrower(ThrowerAnt):
     name = 'Short'
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
+    max_range = 3
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 4
 
 class LongThrower(ThrowerAnt):
@@ -220,8 +224,9 @@ class LongThrower(ThrowerAnt):
     name = 'Long'
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
+    min_range = 5
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 4
 
 class FireAnt(Ant):
@@ -231,13 +236,18 @@ class FireAnt(Ant):
     damage = 3
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
+    armor = 3
     # BEGIN Problem 5
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the gui
     # END Problem 5
 
     def __init__(self, armor=3):
         """Create an Ant with an ARMOR quantity."""
         Ant.__init__(self, armor)
+
+    def make_damge(self, amount):
+        for b in self.place.bees[:]:
+                Bee.reduce_armor(b, amount)
 
     def reduce_armor(self, amount):
         """Reduce armor by AMOUNT, and remove the FireAnt from its place if it
@@ -248,7 +258,13 @@ class FireAnt(Ant):
         """
         # BEGIN Problem 5
         "*** YOUR CODE HERE ***"
+        if self.armor - amount <= 0:
+            self.make_damge(amount+self.damage)
+        else:
+            self.make_damge(amount)
+        Ant.reduce_armor(self, amount)
         # END Problem 5
+
 
 class HungryAnt(Ant):
     """HungryAnt will take three turns to digest a Bee in its place.
