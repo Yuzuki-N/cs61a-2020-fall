@@ -307,6 +307,12 @@ class HungryAnt(Ant):
 
 # BEGIN Problem 7
 # The WallAnt class
+class WallAnt(Ant):
+    implemented = True
+    name = "Wall"
+    food_cost = 4
+    def __init__(self, armor = 4):
+        super().__init__(armor)
 # END Problem 7
 
 
