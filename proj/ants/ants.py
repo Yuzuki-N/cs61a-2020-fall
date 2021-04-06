@@ -105,6 +105,7 @@ class Ant(Insect):
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
     # ADD CLASS ATTRIBUTES HERE
+    is_doubled = False
     def __init__(self, armor=1):
         """Create an Ant with an ARMOR quantity."""
         Insect.__init__(self, armor)
@@ -341,7 +342,7 @@ class ScubaThrower(ThrowerAnt):
 # END Problem 9
 
 # BEGIN Problem EC
-class QueenAnt(Ant):  # You should change this line
+class QueenAnt(ScubaThrower):  # You should change this line
 # END Problem EC
     """The Queen of the colony. The game is over if a bee enters her place."""
 
@@ -349,12 +350,19 @@ class QueenAnt(Ant):  # You should change this line
     food_cost = 7
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
+    real_queen = True
     # END Problem EC
 
     def __init__(self, armor=1):
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        super().__init__(armor)
+        self.real_queen = QueenAnt.real_queen
+        if self.real_queen:
+            QueenAnt.real_queen = False
+        self.ants = []
+
         # END Problem EC
 
     def action(self, gamestate):
@@ -365,6 +373,18 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        
+        if not self.real_queen:
+            super().reduce_armor(self.armor)
+        if self.real_queen:
+            super().action(gamestate)
+            behind = self.place.exit
+            while behind:
+                if behind.ant and behind.ant is not FireAnt and not behind.ant.is_doubled:
+                    behind.ant.damage *= 2
+                    behind.ant.is_doubled = True
+                behind = behind.exit
+        
         # END Problem EC
 
     def reduce_armor(self, amount):
@@ -373,9 +393,15 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem EC
         "*** YOUR CODE HERE ***"
+        super().reduce_armor(amount)
+        if self.armor - amount <= 0 and self.real_queen:
+            bees_win()
         # END Problem EC
 
-
+    def remove_from(self, place):
+        if not self.real_queen:
+            Ant.remove_from(self, place)
+        
 
 class AntRemover(Ant):
     """Allows the player to remove ants from the board in the GUI."""
