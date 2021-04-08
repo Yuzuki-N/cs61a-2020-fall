@@ -36,6 +36,48 @@ class VendingMachine:
     'Here is your soda.'
     """
     "*** YOUR CODE HERE ***"
+    inventory = 0
+    stock = 0
+    def __init__(self, product_name, price):
+        self.product_name = product_name
+        self.price = price
+
+
+    def vend(self):
+        if self.stock == 0:
+            return "Inventory empty. Restocking required."
+        elif self.inventory < self.price:
+            return f'You must add ${self.price - self.inventory} more funds.'
+        elif self.inventory > self.price:
+            self.stock -= 1
+            change = self.inventory -self.price
+            self.inventory = 0
+            return f'Here is your {self.product_name} and ${change} change.'
+        else:
+            self.inventory = 0
+            self.stock -= 1
+            return f'Here is your {self.product_name}.'
+
+            
+
+    def add_funds(self, money):
+        if self.stock == 0:        
+            return f'Inventory empty. Restocking required. Here is your ${money}.'
+        else:
+            self.inventory += money
+            return f'Current balance: ${self.inventory}'
+
+
+    def restock(self, number):
+        self.stock += number
+        return f'Current {self.product_name} stock: {self.stock}'
+        # rest = self.inventory - self.price * number
+        # if rest >= 0:
+        #     self.inventory = rest
+        #     self.stock += number
+        #     return f'Current candy stock: {number + self.stock}'
+        # else:
+        #     return f'You must add ${rest} more funds.'
 
 
 class Mint:
@@ -74,9 +116,11 @@ class Mint:
 
     def create(self, kind):
         "*** YOUR CODE HERE ***"
+        return kind(self.year)
 
     def update(self):
         "*** YOUR CODE HERE ***"
+        self.year = Mint.current_year
 
 class Coin:
     def __init__(self, year):
@@ -84,6 +128,8 @@ class Coin:
 
     def worth(self):
         "*** YOUR CODE HERE ***"
+        return self.cents + max(Mint.current_year - self.year - 50, 0)
+
 
 class Nickel(Coin):
     cents = 5
@@ -108,6 +154,13 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return Link(n)
+    else:
+        first = n // 10
+        rest = n % 10
+        return Link(store_digits(first), Link(rest))
+    
 
 
 def is_bst(t):
