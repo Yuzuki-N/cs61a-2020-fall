@@ -36,5 +36,9 @@
 )
 
 (define (no-repeats lst)
-    
-)
+  (if (null? lst)
+        lst
+        (cons (car lst) 
+          (no-repeats 
+          (filter (lambda (x) (not (= (car lst) x))) 
+            (cdr lst))))))
