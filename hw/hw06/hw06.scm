@@ -6,26 +6,29 @@
 )
 
 (define (caddr s)
-  (car (cdr (cdr s)))
+  (car (cddr s))
 )
 
 
 (define (sign num)
-  (cond 
-      ((< num 0) -1)
-      ((= num 0) 0)
-      ((> num 0) 1))
+  (cond ((< num 0) -1)
+        ((= num 0) 0)
+        (else 1)
+  )
 )
 
 
 (define (square x) (* x x))
 
 (define (pow x y)
-  (cond
-    ((= x 1) 1)
-    ((= y 1) x)
-    ((even? y) (pow (square x) (quotient y 2)))
-    (else (* x (pow (square x) (quotient (- y 1) 2))))
+  (cond ((= x 1) 1)
+        ((= y 1) x)
+        (else
+          (if (even? y) 
+            (square (pow x (quotient y 2)))
+            (* x (square (pow x (quotient y 2))))
+          )
+        )
   )
 )
 
